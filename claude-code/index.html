@@ -1,0 +1,1574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>REVEAL – Multimodal Vision–Language Alignment for AD & Dementia Prediction</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+
+  <style>
+    /* ─── Base ─────────────────────────────────────── */
+    :root {
+      --navy:   #0f2544;
+      --navy2:  #1a3a6b;
+      --blue:   #3b7dd8;
+      --blue2:  #5b9bf5;
+      --teal:   #14b8a6;
+      --bg:     #f4f7fc;
+      --card:   #ffffff;
+      --text:   #1a1a2e;
+      --muted:  #6b7280;
+      --border: #e5e9f2;
+      --radius: 14px;
+      --shadow: 0 4px 24px rgba(15,37,68,.09);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    h1,h2,h3,h4 { font-family: 'Google Sans', sans-serif; }
+
+    /* ─── 1. Scroll Progress Bar ───────────────────── */
+    #scroll-progress {
+      position: fixed;
+      top: 0; left: 0;
+      height: 3px;
+      width: 0%;
+      background: linear-gradient(90deg, var(--navy), var(--teal));
+      z-index: 10000;
+      pointer-events: none;
+    }
+
+    /* ─── Navbar ───────────────────────────────────── */
+    nav.site-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(15,37,68,.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+    }
+
+    nav.site-nav .nav-brand {
+      font-family: 'Google Sans', sans-serif;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #fff;
+      letter-spacing: .03em;
+    }
+
+    nav.site-nav .nav-brand span { color: var(--blue2); }
+
+    nav.site-nav .nav-links {
+      display: flex;
+      gap: 1.75rem;
+      list-style: none;
+      margin: 0; padding: 0;
+    }
+
+    nav.site-nav .nav-links a {
+      color: rgba(255,255,255,.72);
+      text-decoration: none;
+      font-size: .875rem;
+      font-weight: 500;
+      transition: color .2s;
+      position: relative;
+      padding-bottom: 2px;
+    }
+
+    nav.site-nav .nav-links a:hover { color: #fff; }
+
+    /* 2. Active scroll spy */
+    nav.site-nav .nav-links a.active {
+      color: #fff;
+    }
+    nav.site-nav .nav-links a.active::after {
+      content: '';
+      position: absolute;
+      bottom: -2px; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--blue2), var(--teal));
+      border-radius: 2px;
+    }
+
+    /* 10. Hamburger */
+    .hamburger {
+      display: none;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 1.35rem;
+      cursor: pointer;
+      width: 40px; height: 40px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      transition: background .2s;
+      line-height: 1;
+    }
+    .hamburger:hover { background: rgba(255,255,255,.12); }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 56px; left: 0; right: 0;
+      background: rgba(10,25,55,.97);
+      backdrop-filter: blur(14px);
+      z-index: 99;
+      padding: .5rem 0 1rem;
+      box-shadow: 0 12px 32px rgba(0,0,0,.35);
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .mobile-menu.open { display: block; }
+    .mobile-menu ul { list-style: none; margin: 0; padding: 0; }
+    .mobile-menu ul li { border-bottom: 1px solid rgba(255,255,255,.07); }
+    .mobile-menu ul li:last-child { border-bottom: none; }
+    .mobile-menu ul a {
+      display: block;
+      padding: .9rem 2rem;
+      color: rgba(255,255,255,.82);
+      text-decoration: none;
+      font-size: .95rem;
+      font-weight: 500;
+      transition: background .15s, color .15s;
+    }
+    .mobile-menu ul a:hover { background: rgba(255,255,255,.07); color: #fff; }
+
+    @media (max-width: 640px) {
+      .hamburger { display: flex; }
+      nav.site-nav .nav-links { display: none; }
+      .bibtex-code { font-size: .72rem; }
+    }
+
+    /* ─── Hero ─────────────────────────────────────── */
+    .hero-section {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, var(--navy) 0%, #1b3d78 55%, #183471 100%);
+      padding: 5rem 1.5rem 5.5rem;
+      text-align: center;
+    }
+
+    /* Blob decorations */
+    .hero-section::before,
+    .hero-section::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: .35;
+      pointer-events: none;
+    }
+    .hero-section::before {
+      width: 520px; height: 520px;
+      background: radial-gradient(circle, #4f8ef7 0%, transparent 70%);
+      top: -160px; left: -120px;
+    }
+    .hero-section::after {
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, var(--teal) 0%, transparent 70%);
+      bottom: -120px; right: -80px;
+    }
+
+    /* 3. Animated dot-grid overlay */
+    .hero-dot-grid {
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(circle, rgba(255,255,255,.13) 1px, transparent 1px);
+      background-size: 30px 30px;
+      animation: driftGrid 22s linear infinite;
+      pointer-events: none;
+      z-index: 0;
+    }
+    @keyframes driftGrid {
+      0%   { background-position: 0 0; }
+      100% { background-position: 30px 30px; }
+    }
+
+    .hero-inner { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; }
+
+    .venue-badge {
+      display: inline-block;
+      background: linear-gradient(90deg, var(--teal), var(--blue2));
+      color: #fff;
+      font-family: 'Google Sans', sans-serif;
+      font-size: .8rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      padding: .32rem 1rem;
+      border-radius: 40px;
+      margin-bottom: 1.25rem;
+    }
+
+    .hero-title {
+      font-size: clamp(1.8rem, 4vw, 2.75rem);
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.25;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-title .reveal-word {
+      background: linear-gradient(90deg, var(--blue2), var(--teal));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .authors {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: .5rem;
+      margin-bottom: 1rem;
+    }
+
+    .author-chip {
+      background: rgba(255,255,255,.1);
+      border: 1px solid rgba(255,255,255,.18);
+      color: rgba(255,255,255,.92);
+      padding: .28rem .85rem;
+      border-radius: 40px;
+      font-size: .88rem;
+      transition: background .2s;
+      cursor: default;
+    }
+    .author-chip:hover { background: rgba(255,255,255,.2); }
+    .author-chip sup { font-size: .65rem; opacity: .8; }
+
+    .affiliations {
+      color: rgba(255,255,255,.55);
+      font-size: .8rem;
+      margin-bottom: 2rem;
+    }
+
+    .hero-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: .75rem;
+    }
+
+    .hero-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .6rem 1.4rem;
+      border-radius: 40px;
+      font-size: .875rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: transform .18s, box-shadow .18s, background .18s;
+      border: none;
+      cursor: pointer;
+    }
+    .hero-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,.25); }
+    .hero-btn.primary { background: #fff; color: var(--navy); }
+    .hero-btn.secondary {
+      background: rgba(255,255,255,.12);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,.3);
+    }
+    .hero-btn.secondary:hover { background: rgba(255,255,255,.22); }
+
+    /* ─── 7. Wave Section Dividers ─────────────────── */
+    .wave-sep {
+      line-height: 0;
+      display: block;
+    }
+    .wave-sep svg {
+      display: block;
+      width: 100%;
+      height: 72px;
+    }
+
+    /* ─── Section wrappers ─────────────────────────── */
+    .section-wrap {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 4rem 1.5rem;
+    }
+    .section-wrap.wide { max-width: 1100px; }
+    .section-alt { background: #fff; }
+
+    .section-tag {
+      display: inline-block;
+      background: linear-gradient(90deg, #e8f0fe, #dbeafe);
+      color: var(--navy2);
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      padding: .25rem .8rem;
+      border-radius: 40px;
+      margin-bottom: .6rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 2rem;
+    }
+    .section-title.centered { text-align: center; }
+
+    /* ─── Teaser ────────────────────────────────────── */
+    .teaser-card {
+      background: var(--card);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .teaser-card img {
+      width: 100%;
+      display: block;
+      cursor: zoom-in;
+    }
+    .teaser-caption {
+      padding: 1.25rem 1.75rem;
+      border-top: 1px solid var(--border);
+      font-size: .9rem;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    /* ─── 4. TL;DR Card ─────────────────────────────── */
+    .tldr-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.75rem;
+    }
+    .tldr-item {
+      background: linear-gradient(135deg, #eef6ff 0%, #f0fdf4 100%);
+      border: 1px solid #c7d2fe;
+      border-radius: var(--radius);
+      padding: 1.25rem 1.4rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+    .tldr-icon {
+      flex-shrink: 0;
+      width: 42px; height: 42px;
+      background: linear-gradient(135deg, var(--blue), var(--teal));
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff;
+      font-size: 1.1rem;
+    }
+    .tldr-item p {
+      margin: 0;
+      font-size: .9rem;
+      color: var(--navy);
+      font-weight: 500;
+      line-height: 1.5;
+    }
+
+    /* ─── Abstract ─────────────────────────────────── */
+    .abstract-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      padding: 2.5rem;
+    }
+    .abstract-text {
+      font-size: 1rem;
+      color: #374151;
+      line-height: 1.85;
+      text-align: justify;
+    }
+    .abstract-text + .abstract-text { margin-top: 1rem; }
+
+    .keyword-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem;
+      margin-top: 1.5rem;
+    }
+    .kw-pill {
+      background: #eef2ff;
+      color: var(--navy2);
+      padding: .3rem .85rem;
+      border-radius: 40px;
+      font-size: .78rem;
+      font-weight: 500;
+      border: 1px solid #c7d2fe;
+    }
+
+    /* ─── Metrics ─────────────────────────────────── */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.25rem;
+    }
+    .metric-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      padding: 1.75rem 1.25rem 1.5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity .55s ease, transform .55s ease, box-shadow .2s;
+    }
+    .metric-card.visible {
+      opacity: 1;
+      transform: none;
+    }
+    .metric-card:hover { box-shadow: 0 8px 32px rgba(15,37,68,.13); }
+    .metric-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--blue), var(--teal));
+    }
+    .metric-card .task-label {
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: .5rem;
+    }
+    .metric-card .metric-val {
+      font-family: 'Google Sans', sans-serif;
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: var(--navy);
+      line-height: 1;
+    }
+    .metric-card .metric-name {
+      font-size: .75rem;
+      color: var(--muted);
+      margin-top: .4rem;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
+    /* ─── 8. Contributions with icon art ────────────── */
+    .contrib-list { display: flex; flex-direction: column; gap: 1.5rem; }
+
+    .contrib-item {
+      display: flex;
+      gap: 1.25rem;
+      align-items: flex-start;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem 1.75rem;
+      box-shadow: var(--shadow);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity .55s ease, transform .55s ease, box-shadow .2s;
+    }
+    .contrib-item.visible { opacity: 1; transform: none; }
+    .contrib-item:hover { box-shadow: 0 6px 28px rgba(15,37,68,.11); }
+
+    .contrib-num {
+      flex-shrink: 0;
+      width: 40px; height: 40px;
+      background: linear-gradient(135deg, var(--blue), var(--teal));
+      color: #fff;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Google Sans', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .contrib-body strong {
+      color: var(--navy);
+      display: flex;
+      align-items: center;
+      gap: .55rem;
+      flex-wrap: wrap;
+    }
+    .contrib-body p { margin-top: .35rem; color: #4b5563; font-size: .93rem; }
+
+    .contrib-icon-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px; height: 26px;
+      background: linear-gradient(135deg, var(--blue), var(--teal));
+      border-radius: 7px;
+      color: #fff;
+      font-size: .78rem;
+      flex-shrink: 0;
+    }
+
+    /* ─── 5. Method — Tabbed Stepper ────────────────── */
+    .tab-stepper { margin-bottom: 1.5rem; }
+
+    .tab-buttons {
+      display: flex;
+      gap: .6rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+
+    .tab-btn {
+      padding: .55rem 1.35rem;
+      border-radius: 40px;
+      border: 1.5px solid var(--border);
+      background: var(--card);
+      color: var(--muted);
+      font-size: .88rem;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: background .2s, color .2s, border-color .2s, box-shadow .2s;
+    }
+    .tab-btn:hover { border-color: var(--blue2); color: var(--navy); }
+    .tab-btn.active {
+      background: linear-gradient(135deg, var(--blue), var(--teal));
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 4px 16px rgba(59,125,216,.3);
+    }
+
+    .tab-panel { display: none; }
+    .tab-panel.active {
+      display: block;
+      animation: tabFadeIn .35s ease;
+    }
+    @keyframes tabFadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    /* ─── Method figures ─────────────────────────────── */
+    .fig-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .fig-card img {
+      width: 100%;
+      display: block;
+      cursor: zoom-in;
+      transition: transform .3s;
+    }
+    .fig-card img:hover { transform: scale(1.01); }
+    .fig-caption {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid var(--border);
+      font-size: .875rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .method-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    .mbox {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.4rem;
+      box-shadow: var(--shadow);
+    }
+    .mbox .mbox-icon {
+      width: 38px; height: 38px;
+      background: linear-gradient(135deg, #e8f0fe, #dbeafe);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--blue);
+      font-size: 1rem;
+      margin-bottom: .75rem;
+    }
+    .mbox strong { color: var(--navy); display: block; margin-bottom: .35rem; font-size: .95rem; }
+    .mbox p { font-size: .85rem; color: #4b5563; line-height: 1.6; margin: 0; }
+
+    /* ─── 6. Results — Inline AUROC bars ────────────── */
+    .results-wrap {
+      background: var(--card);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      margin-bottom: 2.5rem;
+    }
+    .results-header {
+      padding: 1rem 1.5rem;
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy2) 100%);
+      color: #fff;
+      font-family: 'Google Sans', sans-serif;
+      font-weight: 600;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+    }
+    .results-header .task-icon { opacity: .75; }
+
+    table.rtable {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .9rem;
+    }
+    table.rtable thead th {
+      background: #f8faff;
+      padding: .75rem 1rem;
+      text-align: right;
+      font-weight: 600;
+      color: var(--navy);
+      border-bottom: 2px solid var(--border);
+      font-size: .8rem;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    table.rtable thead th:first-child { text-align: left; }
+    table.rtable tbody td {
+      padding: .6rem 1rem;
+      text-align: right;
+      border-bottom: 1px solid var(--border);
+      color: #374151;
+      vertical-align: top;
+    }
+    table.rtable tbody td:first-child { text-align: left; font-weight: 500; color: var(--navy); }
+    table.rtable tbody tr:last-child td { border-bottom: none; }
+    table.rtable tbody tr.ours-row { background: linear-gradient(90deg, #eef6ff 0%, #f0fdf4 100%); }
+    table.rtable tbody tr.ours-row td { font-weight: 600; }
+    table.rtable tbody tr.ours-row td:first-child { color: var(--navy2); }
+    table.rtable td.best-val { color: #0e7c5a; font-weight: 700; }
+    table.rtable tbody tr:hover:not(.ours-row) { background: #fafbff; }
+
+    .ours-badge {
+      display: inline-block;
+      background: linear-gradient(90deg, var(--blue), var(--teal));
+      color: #fff;
+      font-size: .65rem;
+      font-weight: 700;
+      padding: .15rem .5rem;
+      border-radius: 20px;
+      margin-left: .5rem;
+      vertical-align: middle;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+
+    /* AUROC bar */
+    .auroc-bar-wrap {
+      height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      margin-top: 4px;
+      overflow: hidden;
+    }
+    .auroc-bar {
+      height: 100%;
+      border-radius: 2px;
+      background: #94a3b8;
+      width: 0%;
+      transition: width 1s ease .3s;
+    }
+    .auroc-bar.reveal-bar {
+      background: linear-gradient(90deg, var(--blue), var(--teal));
+    }
+    .auroc-bar.strong-bar { background: #64748b; }
+
+    /* ─── Dataset stats ──────────────────────────────── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1.25rem;
+      margin-top: 1.5rem;
+    }
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1.5rem 1rem;
+      text-align: center;
+      transition: transform .2s;
+    }
+    .stat-card:hover { transform: translateY(-3px); }
+    .stat-card .stat-icon { font-size: 1.5rem; margin-bottom: .5rem; color: var(--blue); }
+    .stat-card .stat-val {
+      font-family: 'Google Sans', sans-serif;
+      font-size: 1.9rem;
+      font-weight: 700;
+      color: var(--navy);
+      line-height: 1.1;
+    }
+    .stat-card .stat-label {
+      font-size: .75rem;
+      color: var(--muted);
+      margin-top: .3rem;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
+    /* ─── BibTeX ─────────────────────────────────────── */
+    .bibtex-card { background: #0f172a; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+    .bibtex-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: .6rem 1.25rem;
+      background: #1e293b;
+    }
+    .bibtex-dots { display: flex; gap: .4rem; }
+    .bibtex-dots span { width: 12px; height: 12px; border-radius: 50%; }
+    .bibtex-dots span:nth-child(1) { background: #ff5f56; }
+    .bibtex-dots span:nth-child(2) { background: #ffbd2e; }
+    .bibtex-dots span:nth-child(3) { background: #27c93f; }
+    .copy-btn {
+      background: rgba(255,255,255,.1);
+      border: 1px solid rgba(255,255,255,.2);
+      color: rgba(255,255,255,.8);
+      border-radius: 6px;
+      padding: .25rem .7rem;
+      font-size: .75rem;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: background .2s;
+      display: flex; align-items: center; gap: .35rem;
+    }
+    .copy-btn:hover { background: rgba(255,255,255,.2); }
+    .copy-btn.copied { color: #27c93f; border-color: #27c93f; }
+    .bibtex-code {
+      padding: 1.5rem 1.75rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .82rem;
+      line-height: 1.7;
+      color: #e2e8f0;
+      white-space: pre;
+      overflow-x: auto;
+      margin: 0;
+    }
+    .bib-key   { color: #f472b6; }
+    .bib-field { color: #7dd3fc; }
+    .bib-value { color: #bbf7d0; }
+    .bib-brace { color: #94a3b8; }
+
+    /* ─── Lightbox ────────────────────────────────────── */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.88);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+    .lightbox.active { display: flex; }
+    .lightbox img {
+      max-width: 92vw;
+      max-height: 88vh;
+      border-radius: 10px;
+      box-shadow: 0 20px 80px rgba(0,0,0,.5);
+    }
+    .lightbox-close {
+      position: fixed;
+      top: 1.25rem; right: 1.5rem;
+      color: #fff;
+      font-size: 1.8rem;
+      cursor: pointer;
+      background: rgba(255,255,255,.1);
+      border: none;
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .2s;
+    }
+    .lightbox-close:hover { background: rgba(255,255,255,.25); }
+
+    /* ─── Footer ─────────────────────────────────────── */
+    footer {
+      background: var(--navy);
+      color: rgba(255,255,255,.55);
+      text-align: center;
+      padding: 2.5rem 1.5rem;
+      font-size: .82rem;
+      line-height: 1.8;
+    }
+    footer a { color: rgba(255,255,255,.75); }
+    footer a:hover { color: #fff; }
+
+    /* ─── Misc fade-in (legacy + table rows) ──────────── */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity .55s ease, transform .55s ease;
+    }
+    .fade-in.visible { opacity: 1; transform: none; }
+
+    .soft-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 2.5rem 0;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── 1. Scroll Progress Bar ───────────────────────── -->
+<div id="scroll-progress"></div>
+
+<!-- ── Navbar ──────────────────────────────────────── -->
+<nav class="site-nav" id="site-nav">
+  <span class="nav-brand"><span>RE</span>VEAL</span>
+  <ul class="nav-links">
+    <li><a href="#abstract">Abstract</a></li>
+    <li><a href="#method">Method</a></li>
+    <li><a href="#results">Results</a></li>
+    <li><a href="#dataset">Dataset</a></li>
+    <li><a href="#bibtex">BibTeX</a></li>
+  </ul>
+  <!-- 10. Hamburger button -->
+  <button class="hamburger" id="hamburger-btn" aria-label="Toggle navigation">&#9776;</button>
+</nav>
+
+<!-- 10. Mobile dropdown menu -->
+<div class="mobile-menu" id="mobile-menu">
+  <ul>
+    <li><a href="#abstract">Abstract</a></li>
+    <li><a href="#method">Method</a></li>
+    <li><a href="#results">Results</a></li>
+    <li><a href="#dataset">Dataset</a></li>
+    <li><a href="#bibtex">BibTeX</a></li>
+  </ul>
+</div>
+
+<!-- ── Hero ───────────────────────────────────────── -->
+<section class="hero-section">
+  <!-- 3. Animated dot grid -->
+  <div class="hero-dot-grid"></div>
+
+  <div class="hero-inner">
+    <div class="venue-badge">MIDL 2026 &nbsp;·&nbsp; Full Paper</div>
+
+    <h1 class="hero-title">
+      <span class="reveal-word">REVEAL:</span> Multimodal Vision–Language Alignment<br>
+      of Retinal Morphometry and Clinical Risks<br>
+      for Incident AD and Dementia Prediction
+    </h1>
+
+    <div class="authors">
+      <span class="author-chip">Seowung Leem<sup>1</sup></span>
+      <span class="author-chip">Lin Gu<sup>2</sup></span>
+      <span class="author-chip">Chenyu You<sup>3,4</sup></span>
+      <span class="author-chip">Kuang Gong<sup>1</sup></span>
+      <span class="author-chip">Ruogu Fang<sup>1 ✉</sup></span>
+    </div>
+
+    <p class="affiliations">
+      <sup>1</sup>&thinsp;University of Florida &nbsp;·&nbsp;
+      <sup>2</sup>&thinsp;Tohoku University &nbsp;·&nbsp;
+      <sup>3,4</sup>&thinsp;Stony Brook University
+    </p>
+
+    <div class="hero-links">
+      <a href="139_REVEAL_Multimodal_Vision_L.pdf" class="hero-btn primary">
+        <i class="fas fa-file-pdf"></i> Paper PDF
+      </a>
+      <a href="#" class="hero-btn secondary">
+        <i class="fab fa-github"></i> Code
+      </a>
+      <a href="#bibtex" class="hero-btn secondary">
+        <i class="fas fa-quote-right"></i> Cite
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- 7. Wave divider: hero → teaser -->
+<div class="wave-sep" style="background: linear-gradient(135deg, #0f2544 0%, #1b3d78 55%, #183471 100%);">
+  <svg viewBox="0 0 1440 72" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,36 C240,72 480,0 720,36 C960,72 1200,8 1440,36 L1440,72 L0,72 Z" fill="#f4f7fc"/>
+  </svg>
+</div>
+
+<!-- ── Teaser ──────────────────────────────────────── -->
+<section style="background: var(--bg); padding: 2rem 1.5rem 3rem;" id="teaser">
+  <div style="max-width: 980px; margin: 0 auto;">
+    <div class="teaser-card fade-in">
+      <img src="figure1.png" alt="REVEAL clinical scenario and group-aware contrastive learning overview">
+      <p class="teaser-caption">
+        <strong>Figure 1.</strong>
+        Clinical scenario and proposed method. REVEAL extracts retinal morphometric features and constructs LLM-generated clinical reports to build a group-aware intra-modality pair matrix. Subjects sharing similar retinal and risk profiles (green) serve as revised positive pairs, enabling richer multimodal alignment.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- 7. Wave divider: teaser (bg) → abstract (white) -->
+<div class="wave-sep" style="background: #f4f7fc;">
+  <svg viewBox="0 0 1440 72" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,0 C360,72 1080,0 1440,48 L1440,72 L0,72 Z" fill="#ffffff"/>
+  </svg>
+</div>
+
+<!-- ── Abstract ────────────────────────────────────── -->
+<section class="section-alt" id="abstract">
+  <div class="section-wrap">
+    <div style="text-align:center; margin-bottom: 1.5rem;">
+      <span class="section-tag">Abstract</span>
+      <h2 class="section-title centered">Overview</h2>
+    </div>
+
+    <!-- 4. TL;DR at-a-glance card -->
+    <div class="tldr-grid fade-in">
+      <div class="tldr-item">
+        <div class="tldr-icon"><i class="fas fa-eye"></i></div>
+        <p>Retinal fundus images as a noninvasive window into Alzheimer's disease</p>
+      </div>
+      <div class="tldr-item">
+        <div class="tldr-icon"><i class="fas fa-clock"></i></div>
+        <p>Predicts AD &amp; dementia <strong>~8 years</strong> before clinical diagnosis</p>
+      </div>
+      <div class="tldr-item">
+        <div class="tldr-icon"><i class="fas fa-trophy"></i></div>
+        <p>State-of-the-art on UK Biobank across <strong>all metrics</strong></p>
+      </div>
+    </div>
+
+    <div class="abstract-card fade-in">
+      <p class="abstract-text">
+        The retina provides a unique, noninvasive window into Alzheimer's disease and dementia, capturing early structural changes through morphometric features, while systemic and lifestyle risk factors reflect well-established contributors to AD and dementia susceptibility long before clinical symptom onset. However, current retinal analysis frameworks typically model imaging and risk factors separately, preventing them from capturing the joint multimodal patterns that are critical for early risk prediction.
+      </p>
+      <p class="abstract-text">
+        To address these limitations, we introduce <strong>REVEAL</strong> (<strong>RE</strong>tinal-risk <strong>V</strong>ision-language <strong>E</strong>arly <strong>A</strong>lzheimer's <strong>L</strong>earning), a novel VLM-based framework that aligns color fundus photographs with individualized disease-specific risk profiles for incident AD and dementia prediction on average <strong>8 years before diagnosis</strong> (range: 1–11 years). We first translate structured risk factors into clinically interpretable narratives compatible with pretrained VLMs. We further propose a <strong>group-aware contrastive learning (GACL)</strong> strategy that clusters patients with similar retinal morphometry and risk factors as positive pairs, strengthening multimodal alignment. REVEAL substantially outperforms state-of-the-art retinal imaging models, clinical text encoders, and general VLMs.
+      </p>
+      <div class="keyword-row">
+        <span class="kw-pill">Retinal morphometry</span>
+        <span class="kw-pill">Risk factors</span>
+        <span class="kw-pill">Alzheimer's disease</span>
+        <span class="kw-pill">Related dementia</span>
+        <span class="kw-pill">Vision-language alignment</span>
+        <span class="kw-pill">Contrastive learning</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 7. Wave divider: abstract (white) → metrics (bg) -->
+<div class="wave-sep" style="background: #ffffff;">
+  <svg viewBox="0 0 1440 72" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,48 C240,0 480,72 720,36 C960,0 1200,60 1440,24 L1440,72 L0,72 Z" fill="#f4f7fc"/>
+  </svg>
+</div>
+
+<!-- ── Key Results (metrics) ─────────────────────── -->
+<section style="background: var(--bg); padding: 3rem 1.5rem;">
+  <div style="max-width: 960px; margin: 0 auto;">
+    <div style="text-align:center; margin-bottom: 1.75rem;">
+      <span class="section-tag">Performance</span>
+      <h2 class="section-title centered">Key Results</h2>
+      <p style="color: var(--muted); font-size: .9rem;">Evaluated on UK Biobank · Predictions from retinal fundus images collected ~8 years before diagnosis</p>
+    </div>
+    <!-- 9. Each card has .metric-card (individually observed + staggered delay) -->
+    <div class="metrics-grid" id="metrics-grid">
+      <div class="metric-card">
+        <p class="task-label">AD Prediction</p>
+        <p class="metric-val" data-target="0.6439">0.00</p>
+        <p class="metric-name">AUROC</p>
+      </div>
+      <div class="metric-card">
+        <p class="task-label">AD Prediction</p>
+        <p class="metric-val" data-target="0.6029">0.00</p>
+        <p class="metric-name">Balanced Accuracy</p>
+      </div>
+      <div class="metric-card">
+        <p class="task-label">Dementia Prediction</p>
+        <p class="metric-val" data-target="0.6782">0.00</p>
+        <p class="metric-name">AUROC</p>
+      </div>
+      <div class="metric-card">
+        <p class="task-label">Dementia Prediction</p>
+        <p class="metric-val" data-target="0.6294">0.00</p>
+        <p class="metric-name">Balanced Accuracy</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Contributions ─────────────────────────────── -->
+<section class="section-alt">
+  <div class="section-wrap">
+    <div style="text-align:center; margin-bottom: 1.75rem;">
+      <span class="section-tag">Contributions</span>
+      <h2 class="section-title centered">What We Propose</h2>
+    </div>
+    <!-- 8 + 9. Icon art, individually observed, staggered -->
+    <div class="contrib-list">
+
+      <div class="contrib-item">
+        <div class="contrib-num">1</div>
+        <div class="contrib-body">
+          <strong>
+            <span class="contrib-icon-badge"><i class="fas fa-layer-group"></i></span>
+            First joint multimodal framework for early AD &amp; dementia prediction
+          </strong>
+          <p>REVEAL is the first framework to jointly model fundus photographs and individualized AD/dementia risk factors, translating structured questionnaire data into clinically meaningful narratives compatible with pretrained VLMs — bridging the gap between tabular health data and vision-language models.</p>
+        </div>
+      </div>
+
+      <div class="contrib-item">
+        <div class="contrib-num">2</div>
+        <div class="contrib-body">
+          <strong>
+            <span class="contrib-icon-badge"><i class="fas fa-circle-nodes"></i></span>
+            Group-Aware Contrastive Learning (GACL)
+          </strong>
+          <p>We propose a novel strategy that identifies subjects sharing similar retinal morphometry and clinical risk profiles, enabling clinically aligned multimodal representation learning. Explicit morphometric grounding outperforms latent-similarity-based approaches from prior work.</p>
+        </div>
+      </div>
+
+      <div class="contrib-item">
+        <div class="contrib-num">3</div>
+        <div class="contrib-body">
+          <strong>
+            <span class="contrib-icon-badge"><i class="fas fa-trophy"></i></span>
+            State-of-the-art performance — 8 years before diagnosis
+          </strong>
+          <p>REVEAL outperforms retinal-only, clinical-text, and general VLM baselines on incident AD (mean 8.68 yrs, range 2.38–11.58 yrs) and dementia prediction (mean 8.49 yrs, range 1.50–11.58 yrs) tasks on the UK Biobank.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── Method ─────────────────────────────────────── -->
+<section style="background: var(--bg);" id="method">
+  <div class="section-wrap wide">
+    <div style="text-align:center; margin-bottom: 1.75rem;">
+      <span class="section-tag">Method</span>
+      <h2 class="section-title centered">REVEAL Framework</h2>
+      <p style="color: var(--muted); font-size: .95rem; max-width: 680px; margin: 0 auto;">
+        Two-stage pipeline: (1) multimodal contrastive pre-training via GACL, (2) downstream SVM classification using the learned joint embeddings.
+      </p>
+    </div>
+
+    <!-- 5. Tabbed stepper for figures -->
+    <div class="tab-stepper fade-in">
+      <div class="tab-buttons">
+        <button class="tab-btn active" data-tab="0">
+          <i class="fas fa-sitemap" style="margin-right:.4rem; font-size:.8rem;"></i>Overview
+        </button>
+        <button class="tab-btn" data-tab="1">
+          <i class="fas fa-file-medical-alt" style="margin-right:.4rem; font-size:.8rem;"></i>Report Generation
+        </button>
+        <button class="tab-btn" data-tab="2">
+          <i class="fas fa-circle-nodes" style="margin-right:.4rem; font-size:.8rem;"></i>GACL Architecture
+        </button>
+      </div>
+
+      <div class="tab-panel active" data-panel="0">
+        <div class="fig-card">
+          <img src="figure1.png" alt="REVEAL clinical scenario overview">
+          <p class="fig-caption">
+            <strong>Figure 1 — Overview.</strong>
+            Clinical scenario and proposed method. REVEAL extracts retinal morphometric features and constructs LLM-generated clinical reports to build a group-aware intra-modality pair matrix. Subjects sharing similar retinal and risk profiles (green) serve as revised positive pairs, enabling richer multimodal alignment.
+          </p>
+        </div>
+      </div>
+
+      <div class="tab-panel" data-panel="1">
+        <div class="fig-card">
+          <img src="figure2.png" alt="Synthetic clinical report generation using Llama 3.1">
+          <p class="fig-caption">
+            <strong>Figure 2 — Report Generation.</strong>
+            Structured risk-factor data (demographics, general health, lifestyle) are converted into standardized natural-language narratives using <strong>Llama 3.1</strong> and a CARE-guideline-adapted template, making them compatible with pretrained VLMs.
+          </p>
+        </div>
+      </div>
+
+      <div class="tab-panel" data-panel="2">
+        <div class="fig-card">
+          <img src="figure3.png" alt="GACL architecture overview">
+          <p class="fig-caption">
+            <strong>Figure 3 — GACL Architecture.</strong>
+            Morphometric similarity masks (L<sup><b>F</b></sup>) and clinical report similarity masks (L<sup><b>T</b></sup>) are combined via logical OR to form a group similarity mask L<sup><b>group</b></sup>. An indicator function maps this to the final label matrix <b>L</b>, driving group-aware image–text contrastive alignment.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <hr class="soft-divider">
+
+    <div class="method-grid fade-in">
+      <div class="mbox">
+        <div class="mbox-icon"><i class="fas fa-file-medical-alt"></i></div>
+        <strong>Clinical Report Generation</strong>
+        <p>Llama 3.1 converts structured UK Biobank questionnaire data into consistent clinical narratives following CARE guidelines — no hallucination, 1:1 data mapping.</p>
+      </div>
+      <div class="mbox">
+        <div class="mbox-icon"><i class="fas fa-circle-nodes"></i></div>
+        <strong>Group-Aware CLIP</strong>
+        <p>Extends CLIP by grouping clinically similar subjects as positive pairs using both retinal morphometry and text similarity, supporting multiple positive pairs per sample.</p>
+      </div>
+      <div class="mbox">
+        <div class="mbox-icon"><i class="fas fa-eye"></i></div>
+        <strong>Retinal Morphometry</strong>
+        <p>17 morphometric features (CDR, vessel density, fractal dimension, etc.) extracted via AutoMorph serve as explicit clinical grounding — more precise than latent similarity.</p>
+      </div>
+      <div class="mbox">
+        <div class="mbox-icon"><i class="fas fa-network-wired"></i></div>
+        <strong>Architecture</strong>
+        <p>RETFound image encoder + GatorTron text encoder, with lightweight trainable projection layers. Frozen pretrained weights preserve biomedical foundation model priors.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 7. Wave divider: method (bg) → results (white) -->
+<div class="wave-sep" style="background: #f4f7fc;">
+  <svg viewBox="0 0 1440 72" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,24 C360,72 720,0 1080,48 C1260,72 1380,30 1440,36 L1440,72 L0,72 Z" fill="#ffffff"/>
+  </svg>
+</div>
+
+<!-- ── Results ────────────────────────────────────── -->
+<section class="section-alt" id="results">
+  <div class="section-wrap wide">
+    <div style="text-align:center; margin-bottom: 1.75rem;">
+      <span class="section-tag">Results</span>
+      <h2 class="section-title centered">Comparison with Baselines</h2>
+    </div>
+
+    <!-- AD Table -->
+    <div class="results-wrap fade-in" id="results-ad">
+      <div class="results-header">
+        <i class="fas fa-brain task-icon"></i>
+        Incident Alzheimer's Disease Prediction
+      </div>
+      <table class="rtable">
+        <thead>
+          <tr>
+            <th>Method</th>
+            <th>AUROC</th>
+            <th>Balanced Acc.</th>
+            <th>F1-Score</th>
+            <th>MCC</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Baseline SVM</td>
+            <td>0.5721<div class="auroc-bar-wrap"><div class="auroc-bar" data-width="49"></div></div></td>
+            <td>0.5517</td><td>0.1290</td><td>0.0561</td>
+          </tr>
+          <tr>
+            <td>KeepFIT-CFP</td>
+            <td>0.5264<div class="auroc-bar-wrap"><div class="auroc-bar" data-width="31"></div></div></td>
+            <td>0.5411</td><td>0.1481</td><td>0.0455</td>
+          </tr>
+          <tr>
+            <td>BiomedCLIP</td>
+            <td>0.5941<div class="auroc-bar-wrap"><div class="auroc-bar" data-width="58"></div></div></td>
+            <td>0.5492</td><td>0.1468</td><td>0.0670</td>
+          </tr>
+          <tr>
+            <td>RETCLIP</td>
+            <td>0.5738<div class="auroc-bar-wrap"><div class="auroc-bar" data-width="50"></div></div></td>
+            <td>0.5633</td><td>0.1749</td><td>0.1050</td>
+          </tr>
+          <tr>
+            <td>PMC-CLIP</td>
+            <td>0.5281<div class="auroc-bar-wrap"><div class="auroc-bar" data-width="31"></div></div></td>
+            <td>0.5671</td><td>0.1953</td><td>0.1241</td>
+          </tr>
+          <tr>
+            <td>RETFound + GatorTron</td>
+            <td>0.6418<div class="auroc-bar-wrap"><div class="auroc-bar strong-bar" data-width="77"></div></div></td>
+            <td>0.5835</td><td>0.1656</td><td>0.1286</td>
+          </tr>
+          <tr>
+            <td>Ours (no GACL)</td>
+            <td>0.5951<div class="auroc-bar-wrap"><div class="auroc-bar" data-width="58"></div></div></td>
+            <td>0.5622</td><td>0.2129</td><td>0.0763</td>
+          </tr>
+          <tr class="ours-row">
+            <td><strong>REVEAL (Ours)</strong> <span class="ours-badge">Best</span></td>
+            <td class="best-val">0.6439<div class="auroc-bar-wrap"><div class="auroc-bar reveal-bar" data-width="78"></div></div></td>
+            <td class="best-val">0.6029</td>
+            <td class="best-val">0.2270</td>
+            <td class="best-val">0.1562</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Dementia Table -->
+    <div class="results-wrap fade-in" id="results-dem">
+      <div class="results-header">
+        <i class="fas fa-head-side-brain task-icon"></i>
+        Incident Dementia Prediction
+      </div>
+      <table class="rtable">
+        <thead>
+          <tr>
+            <th>Method</th>
+            <th>AUROC</th>
+            <th>Balanced Acc.</th>
+            <th>F1-Score</th>
+            <th>MCC</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Baseline SVM</td>
+            <td>0.5714<div class="auroc-bar-wrap"><div class="auroc-bar" data-width="49"></div></div></td>
+            <td>0.5431</td><td>0.1349</td><td>0.0595</td>
+          </tr>
+          <tr>
+            <td>KeepFIT-CFP</td>
+            <td>0.4903<div class="auroc-bar-wrap"><div class="auroc-bar" data-width="16"></div></div></td>
+            <td>0.4879</td><td>0.1113</td><td>−0.0157</td>
+          </tr>
+          <tr>
+            <td>BiomedCLIP</td>
+            <td>0.5430<div class="auroc-bar-wrap"><div class="auroc-bar" data-width="37"></div></div></td>
+            <td>0.5101</td><td>0.1091</td><td>0.0072</td>
+          </tr>
+          <tr>
+            <td>RETCLIP</td>
+            <td>0.6029<div class="auroc-bar-wrap"><div class="auroc-bar" data-width="61"></div></div></td>
+            <td>0.5397</td><td>0.1500</td><td>0.0751</td>
+          </tr>
+          <tr>
+            <td>PMC-CLIP</td>
+            <td>0.4605<div class="auroc-bar-wrap"><div class="auroc-bar" data-width="5"></div></div></td>
+            <td>0.5550</td><td>0.1725</td><td>0.0971</td>
+          </tr>
+          <tr>
+            <td>RETFound + GatorTron</td>
+            <td>0.6596<div class="auroc-bar-wrap"><div class="auroc-bar strong-bar" data-width="84"></div></div></td>
+            <td>0.6121</td><td>0.2239</td><td>0.1532</td>
+          </tr>
+          <tr>
+            <td>Ours (no GACL)</td>
+            <td>0.5886<div class="auroc-bar-wrap"><div class="auroc-bar" data-width="55"></div></div></td>
+            <td>0.5768</td><td>0.1912</td><td>0.1003</td>
+          </tr>
+          <tr class="ours-row">
+            <td><strong>REVEAL (Ours)</strong> <span class="ours-badge">Best</span></td>
+            <td class="best-val">0.6782<div class="auroc-bar-wrap"><div class="auroc-bar reveal-bar" data-width="91"></div></div></td>
+            <td class="best-val">0.6294</td>
+            <td class="best-val">0.2599</td>
+            <td class="best-val">0.1915</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p style="text-align:center; color: var(--muted); font-size:.85rem; margin-top: -.5rem;">
+      Best results per metric shown in <span style="color:#0e7c5a; font-weight:700;">green bold</span>. All experiments repeated 10× with different random seeds.
+    </p>
+  </div>
+</section>
+
+<!-- ── Dataset ────────────────────────────────────── -->
+<section style="background: var(--bg);" id="dataset">
+  <div class="section-wrap">
+    <div style="text-align:center; margin-bottom: 1.75rem;">
+      <span class="section-tag">Dataset</span>
+      <h2 class="section-title centered">UK Biobank</h2>
+      <p style="color: var(--muted); max-width: 620px; margin: 0 auto; font-size: .95rem;">
+        Color fundus photographs and AD/dementia-related risk factors from the UK Biobank (application ID 48388). Images quality-controlled via AutoMorph.
+      </p>
+    </div>
+    <div class="stats-grid fade-in">
+      <div class="stat-card">
+        <div class="stat-icon"><i class="fas fa-users"></i></div>
+        <p class="stat-val">39,242</p>
+        <p class="stat-label">Total Participants</p>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon"><i class="fas fa-brain"></i></div>
+        <p class="stat-val">86</p>
+        <p class="stat-label">Incident AD Cases</p>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon"><i class="fas fa-head-side-brain"></i></div>
+        <p class="stat-val">93</p>
+        <p class="stat-label">Incident Dementia Cases</p>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon"><i class="fas fa-clock"></i></div>
+        <p class="stat-val">~8 yrs</p>
+        <p class="stat-label">Avg. Lead Time</p>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon"><i class="fas fa-camera"></i></div>
+        <p class="stat-val">66,251</p>
+        <p class="stat-label">High-Quality CFPs</p>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon"><i class="fas fa-list-check"></i></div>
+        <p class="stat-val">17</p>
+        <p class="stat-label">Morphometric Features</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── BibTeX ─────────────────────────────────────── -->
+<section class="section-alt" id="bibtex">
+  <div class="section-wrap">
+    <div style="text-align:center; margin-bottom: 1.75rem;">
+      <span class="section-tag">Citation</span>
+      <h2 class="section-title centered">BibTeX</h2>
+    </div>
+    <div class="bibtex-card fade-in">
+      <div class="bibtex-topbar">
+        <div class="bibtex-dots">
+          <span></span><span></span><span></span>
+        </div>
+        <button class="copy-btn" id="copy-bibtex" onclick="copyBibtex()">
+          <i class="fas fa-copy"></i> Copy
+        </button>
+      </div>
+      <pre class="bibtex-code" id="bibtex-text"><span class="bib-brace">@inproceedings{</span><span class="bib-key">leem2026reveal</span><span class="bib-brace">,</span>
+  <span class="bib-field">title</span>     = <span class="bib-brace">{</span><span class="bib-value">{REVEAL}: Multimodal Vision--Language Alignment of Retinal
+               Morphometry and Clinical Risks for Incident {AD} and
+               Dementia Prediction</span><span class="bib-brace">},</span>
+  <span class="bib-field">author</span>    = <span class="bib-brace">{</span><span class="bib-value">Leem, Seowung and Gu, Lin and You, Chenyu and
+               Gong, Kuang and Fang, Ruogu</span><span class="bib-brace">},</span>
+  <span class="bib-field">booktitle</span> = <span class="bib-brace">{</span><span class="bib-value">Medical Imaging with Deep Learning (MIDL)</span><span class="bib-brace">},</span>
+  <span class="bib-field">year</span>      = <span class="bib-brace">{</span><span class="bib-value">2026</span><span class="bib-brace">}</span>
+<span class="bib-brace">}</span></pre>
+    </div>
+  </div>
+</section>
+
+<!-- 7. Wave divider: bibtex (white) → footer (navy) -->
+<div class="wave-sep" style="background: #ffffff;">
+  <svg viewBox="0 0 1440 72" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,36 C480,72 960,0 1440,36 L1440,72 L0,72 Z" fill="#0f2544"/>
+  </svg>
+</div>
+
+<!-- ── Footer ─────────────────────────────────────── -->
+<footer>
+  <p style="margin-bottom:.5rem; color:rgba(255,255,255,.8); font-family:'Google Sans',sans-serif; font-weight:600;">
+    REVEAL &nbsp;·&nbsp; MIDL 2026
+  </p>
+  <p>
+    Supported by NSF Grant No. 2123809. Data from UK Biobank (application ID 48388).
+  </p>
+  <p>
+    Website template based on <a href="https://nerfies.github.io" target="_blank">Nerfies</a>,
+    licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank">CC BY-SA 4.0</a>.
+    &copy; 2026 Leem, Gu, You, Gong &amp; Fang.
+  </p>
+</footer>
+
+<!-- ── Lightbox ────────────────────────────────────── -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+<script>
+  /* ── 1. Scroll progress bar ── */
+  const scrollProg = document.getElementById('scroll-progress');
+  window.addEventListener('scroll', () => {
+    const scrolled = document.documentElement.scrollTop;
+    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+    scrollProg.style.width = (scrolled / maxScroll * 100) + '%';
+  }, { passive: true });
+
+  /* ── 2. Scroll spy ── */
+  const navAnchors = document.querySelectorAll('nav.site-nav .nav-links a');
+  const spySections = document.querySelectorAll('section[id]');
+
+  const spyObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        navAnchors.forEach(a => {
+          a.classList.toggle('active', a.getAttribute('href') === '#' + id);
+        });
+      }
+    });
+  }, { rootMargin: '-35% 0px -60% 0px' });
+
+  spySections.forEach(sec => spyObserver.observe(sec));
+
+  /* ── 5. Method tabs ── */
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const idx = btn.dataset.tab;
+      const stepper = btn.closest('.tab-stepper');
+      stepper.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      stepper.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      stepper.querySelector('[data-panel="' + idx + '"]').classList.add('active');
+    });
+  });
+
+  /* ── 6. Animate AUROC bars when results scroll into view ── */
+  function animateAurocBars(container) {
+    container.querySelectorAll('.auroc-bar[data-width]').forEach((bar, i) => {
+      const targetWidth = bar.dataset.width;
+      bar.style.transitionDelay = (i * 60) + 'ms';
+      bar.style.width = targetWidth + '%';
+    });
+  }
+
+  const resultsObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        animateAurocBars(entry.target);
+        resultsObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.results-wrap').forEach(el => resultsObserver.observe(el));
+
+  /* ── 9. Staggered child animations ── */
+  // Metric cards — stagger 80ms each
+  document.querySelectorAll('.metric-card').forEach((card, i) => {
+    card.style.transitionDelay = (i * 80) + 'ms';
+  });
+
+  // Contrib items — stagger 120ms each
+  document.querySelectorAll('.contrib-item').forEach((item, i) => {
+    item.style.transitionDelay = (i * 120) + 'ms';
+  });
+
+  // Individual IntersectionObserver for metric cards and contrib items
+  const childObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        childObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.metric-card, .contrib-item').forEach(el => childObserver.observe(el));
+
+  /* ── 10. Hamburger menu ── */
+  const hamburgerBtn = document.getElementById('hamburger-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+
+  hamburgerBtn.addEventListener('click', () => {
+    const isOpen = mobileMenu.classList.toggle('open');
+    hamburgerBtn.innerHTML = isOpen ? '&#10005;' : '&#9776;';
+  });
+
+  mobileMenu.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      mobileMenu.classList.remove('open');
+      hamburgerBtn.innerHTML = '&#9776;';
+    });
+  });
+
+  /* ── Lightbox ── */
+  document.querySelectorAll('.teaser-card img, .fig-card img').forEach(img => {
+    img.addEventListener('click', () => {
+      document.getElementById('lightbox-img').src = img.src;
+      document.getElementById('lightbox').classList.add('active');
+    });
+  });
+
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('active');
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeLightbox();
+  });
+
+  /* ── Fade-in on scroll (generic .fade-in elements) ── */
+  const fadeObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); fadeObserver.unobserve(e.target); }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.fade-in').forEach(el => fadeObserver.observe(el));
+
+  /* ── Animated counters ── */
+  function animateCounter(el) {
+    const target = parseFloat(el.dataset.target);
+    const duration = 1400;
+    const start = performance.now();
+    function step(now) {
+      const progress = Math.min((now - start) / duration, 1);
+      const ease = 1 - Math.pow(1 - progress, 3);
+      el.textContent = (ease * target).toFixed(4);
+      if (progress < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  const counterObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.querySelectorAll('[data-target]').forEach(animateCounter);
+        counterObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.2 });
+
+  document.querySelectorAll('.metrics-grid').forEach(el => counterObs.observe(el));
+
+  /* ── Copy BibTeX ── */
+  function copyBibtex() {
+    const raw = `@inproceedings{leem2026reveal,
+  title     = {{REVEAL}: Multimodal Vision--Language Alignment of Retinal
+               Morphometry and Clinical Risks for Incident {AD} and
+               Dementia Prediction},
+  author    = {Leem, Seowung and Gu, Lin and You, Chenyu and
+               Gong, Kuang and Fang, Ruogu},
+  booktitle = {Medical Imaging with Deep Learning (MIDL)},
+  year      = {2026}
+}`;
+    navigator.clipboard.writeText(raw).then(() => {
+      const btn = document.getElementById('copy-bibtex');
+      btn.classList.add('copied');
+      btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+      setTimeout(() => {
+        btn.classList.remove('copied');
+        btn.innerHTML = '<i class="fas fa-copy"></i> Copy';
+      }, 2200);
+    });
+  }
+</script>
+
+</body>
+</html>
