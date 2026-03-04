@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="REVEAL: Multimodal Vision-Language Alignment of Retinal Morphometry and Clinical Risks for Incident AD and Dementia Prediction.">
+  <meta name="keywords"
+        content="REVEAL, retinal morphometry, Alzheimer's disease, dementia, vision-language alignment, contrastive learning, MIDL">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>REVEAL: Multimodal Vision-Language Alignment of Retinal Morphometry and
+    Clinical Risks for Incident AD and Dementia Prediction</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.svg">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+<!-- Navbar. -->
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a role="button" class="navbar-burger" aria-label="menu"
+       aria-expanded="false">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+  <div class="navbar-menu">
+    <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+      <a class="navbar-item" href="https://chintan-27.github.io/">
+        <span class="icon">
+          <i class="fas fa-home"></i>
+        </span>
+      </a>
+
+      <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">
+          More Research
+        </a>
+        <div class="navbar-dropdown">
+          <a class="navbar-item"
+             href="https://openreview.net/forum?id=aOKAXRHXVw">
+            REVEAL (MIDL 2026)
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+<!--/ Navbar. -->
+
+<!-- Hero / Title. -->
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">
+            <span class="reveal">REVEAL</span>: Multimodal Vision&ndash;Language
+            Alignment of Retinal Morphometry and Clinical Risks for Incident AD
+            and Dementia Prediction
+          </h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://openreview.net/profile?id=~Seowung_Leem1">Seowung Leem</a><sup>1</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://openreview.net/profile?id=~Lin_Gu4">Lin Gu</a><sup>2</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://chenyuyou.me/">Chenyu You</a><sup>3,4</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://openreview.net/profile?id=~Kuang_Gong2">Kuang Gong</a><sup>1</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://ruogu-fang.github.io/">Ruogu Fang</a><sup>1</sup><span class="corresponding-author">*</span>
+            </span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <sup>1</sup>J. Crayton Pruitt Family Dept. of Biomedical Engineering,
+              University of Florida,
+            </span>
+            <span class="author-block">
+              <sup>2</sup>Research Institute of Electrical Communication,
+              Tohoku University,
+            </span>
+            <span class="author-block">
+              <sup>3</sup>Dept. of Applied Mathematics &amp; Statistics,
+              Stony Brook University,
+            </span>
+            <span class="author-block">
+              <sup>4</sup>Dept. of Computer Science, Stony Brook University
+            </span>
+          </div>
+
+          <div class="is-size-6 publication-venue">
+            MIDL 2026 &middot; Poster
+          </div>
+
+          <div class="is-size-7 corresponding-note">
+            * Corresponding Author
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href="https://openreview.net/pdf?id=aOKAXRHXVw"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                    <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <!-- OpenReview Link. -->
+              <span class="link-block">
+                <a href="https://openreview.net/forum?id=aOKAXRHXVw"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                    <i class="ai ai-openreview"></i>
+                  </span>
+                  <span>OpenReview</span>
+                </a>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!--/ Hero / Title. -->
+
+<!-- Teaser. -->
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <img src="./static/images/figure1-clinical-scenario.png"
+           alt="Schematic of the clinical scenario and proposed REVEAL method showing
+                how retinal morphometry and clinical risk factors are aligned for
+                Alzheimer's disease prediction."
+           class="teaser-image">
+      <h2 class="subtitle has-text-centered">
+        <span class="reveal">REVEAL</span> aligns color fundus photographs with
+        individualized disease-specific risk profiles for incident AD and dementia
+        prediction &mdash; on average <strong>8 years before diagnosis</strong>.
+      </h2>
+    </div>
+  </div>
+</section>
+<!--/ Teaser. -->
+
+<!-- Abstract. -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            The retina provides a unique, noninvasive window into Alzheimer's disease
+            and dementia, capturing early structural changes through morphometric
+            features, while systemic and lifestyle risk factors reflect well-established
+            contributors to AD and dementia susceptibility long before clinical symptom
+            onset. However, current retinal analysis frameworks typically model imaging
+            and risk factors separately, preventing them from capturing the joint
+            multimodal patterns that are critical for early risk prediction. Moreover,
+            existing methods rarely incorporate mechanisms to organize or align patients
+            with similar retinal and clinical characteristics, limiting their ability to
+            learn coherent cross-modal associations.
+          </p>
+          <p>
+            To address these limitations, we introduce
+            <span class="reveal">REVEAL</span>
+            (<strong>RE</strong>tinal-risk <strong>V</strong>ision-language
+            <strong>E</strong>arly <strong>A</strong>lzheimer's
+            <strong>L</strong>earning) that aligns color fundus photographs with
+            individualized disease-specific risk profiles for incident AD and dementia
+            prediction on average 8 years before diagnosis (range: 1&ndash;11 years).
+            Because real-world risk factors are structured questionnaire data, we first
+            translate them into clinically interpretable narratives compatible with
+            pretrained vision&ndash;language models (VLMs). We further propose a
+            <em>group-aware contrastive learning</em> (GACL) strategy that clusters
+            patients with similar retinal morphometry and risk factors as positive pairs,
+            strengthening multimodal alignment.
+          </p>
+          <p>
+            This unified representation-learning framework substantially outperforms
+            state-of-the-art retinal imaging models paired with clinical text encoders,
+            as well as general VLMs, demonstrating the value of jointly modeling retinal
+            biomarkers and clinical risk factors. By providing a generalizable,
+            noninvasive approach for early AD and dementia risk stratification,
+            <span class="reveal">REVEAL</span> has the potential to enable earlier
+            interventions and improve preventive care at the population level.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!--/ Abstract. -->
+
+<!-- Method. -->
+<section class="section">
+  <div class="container is-max-desktop">
+
+    <!-- Contributions. -->
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Method</h2>
+        <div class="content has-text-justified">
+          <p>
+            <span class="reveal">REVEAL</span> operates in two stages. First, it
+            aligns fundus images with individualized AD and dementia risk factors using
+            a CLIP-style contrastive learning approach with a novel image&ndash;text
+            pairing strategy. Second, the learned joint representations are utilized in a
+            downstream classifier to predict incident, preclinical AD and dementia.
+          </p>
+
+          <p>Our key contributions are:</p>
+          <ul>
+            <li>
+              We introduce <span class="reveal">REVEAL</span>, the first framework to
+              jointly model fundus images and individualized AD and dementia risk factors
+              by translating structured questionnaires into clinically meaningful
+              narratives compatible with pretrained VLMs.
+            </li>
+            <li>
+              We propose a <em>group-aware contrastive learning</em> (GACL) strategy
+              that identifies subjects sharing similar retinal morphometry and risk
+              profiles, enabling coherent and clinically aligned multimodal
+              representation learning.
+            </li>
+            <li>
+              <span class="reveal">REVEAL</span> achieves state-of-the-art performance
+              in predicting incident AD and dementia on average 8 years before clinical
+              onset (AD: mean&nbsp;=&nbsp;8.68 years; dementia:
+              mean&nbsp;=&nbsp;8.49 years).
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <!--/ Contributions. -->
+
+    <!-- Clinical Report Generation. -->
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h3 class="title is-4">Synthetic Clinical Report Generation</h3>
+        <div class="content has-text-justified">
+          <p>
+            Direct application of CLIP is not feasible because the risk factors come
+            as structured questionnaire data rather than natural language. Using
+            LLaMA-3.1, we convert each participant's risk factor profile into a
+            synthetic clinical report&mdash;a clinically interpretable narrative
+            following the CARE clinical case report guideline. This transformation
+            enables the VLM to interpret tabular risk factors in a linguistically
+            contextualized form.
+          </p>
+        </div>
+        <div class="has-text-centered">
+          <img src="./static/images/figure2-report-generation.png"
+               alt="Schematic overview showing how synthetic clinical reports are
+                    generated from structured patient questionnaire data using
+                    LLaMA-3.1."
+               class="method-image">
+        </div>
+        <p class="has-text-centered is-size-6 figure-caption">
+          <strong>Figure 2.</strong> Schematic overview of synthetic clinical report
+          generation from structured risk-factor data.
+        </p>
+      </div>
+    </div>
+    <!--/ Clinical Report Generation. -->
+
+    <!-- GACL. -->
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h3 class="title is-4">Group-Aware Contrastive Learning (GACL)</h3>
+        <div class="content has-text-justified">
+          <p>
+            Conventional CLIP-style frameworks often fail in the medical domain because
+            they only accommodate a single positive pair per sample. Our GACL strategy
+            computes intra-modality similarity matrices for both retinal morphometric
+            features and clinical report embeddings, then applies thresholding and a
+            logical OR operation to identify groups of clinically aligned patients. This
+            enables multiple positive pairs per sample, strengthening multimodal
+            alignment by reinforcing agreement between subjects who share both
+            structural and semantic similarity.
+          </p>
+        </div>
+        <div class="has-text-centered">
+          <img src="./static/images/figure3-gacl-overview.png"
+               alt="Schematic overview of the Group-Aware Contrastive Learning (GACL)
+                    strategy showing image encoder, text encoder, similarity masks,
+                    and the final label matrix construction."
+               class="method-image">
+        </div>
+        <p class="has-text-centered is-size-6 figure-caption">
+          <strong>Figure 3.</strong> Schematic overview of the GACL strategy. Trainable
+          components are denoted by the flame icon.
+        </p>
+      </div>
+    </div>
+    <!--/ GACL. -->
+
+  </div>
+</section>
+<!--/ Method. -->
+
+<!-- Results. -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Results</h2>
+        <div class="content has-text-justified">
+          <p>
+            We evaluated <span class="reveal">REVEAL</span> on UK Biobank data
+            (39,242 participants) for predicting incident AD and dementia. All color
+            fundus photographs were collected from cognitively normal participants at
+            baseline, with diagnoses occurring on average 8 years later.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Results Carousel. -->
+    <div id="results-carousel" class="carousel results-carousel">
+      <!-- AD Prediction Table. -->
+      <div class="item">
+        <div class="result-card">
+          <h3 class="title is-4 has-text-centered">
+            Incident Alzheimer's Disease Prediction
+          </h3>
+          <div class="table-container">
+            <table class="table is-bordered is-striped is-hoverable is-fullwidth">
+              <thead>
+                <tr>
+                  <th>Model</th>
+                  <th>AUROC</th>
+                  <th>Balanced Acc.</th>
+                  <th>F1-Score</th>
+                  <th>MCC</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Baseline SVM</td>
+                  <td>0.5487</td>
+                  <td>0.5437</td>
+                  <td>0.1290</td>
+                  <td>0.0481</td>
+                </tr>
+                <tr>
+                  <td>KeepFIT-CFP</td>
+                  <td>0.5274</td>
+                  <td>0.5105</td>
+                  <td>0.1148</td>
+                  <td>0.0114</td>
+                </tr>
+                <tr>
+                  <td>BiomedCLIP</td>
+                  <td>0.5333</td>
+                  <td>0.4981</td>
+                  <td>0.0965</td>
+                  <td>-0.0114</td>
+                </tr>
+                <tr>
+                  <td>RETCLIP</td>
+                  <td>0.5519</td>
+                  <td>0.5345</td>
+                  <td>0.1303</td>
+                  <td>0.0483</td>
+                </tr>
+                <tr>
+                  <td>PMC-CLIP</td>
+                  <td>0.5463</td>
+                  <td>0.5268</td>
+                  <td>0.1360</td>
+                  <td>0.0427</td>
+                </tr>
+                <tr>
+                  <td>RETFound+GatorTron</td>
+                  <td>0.6104</td>
+                  <td>0.5529</td>
+                  <td>0.1628</td>
+                  <td>0.0809</td>
+                </tr>
+                <tr>
+                  <td>Ours (no GACL)</td>
+                  <td>0.6126</td>
+                  <td>0.5836</td>
+                  <td>0.2011</td>
+                  <td>0.1169</td>
+                </tr>
+                <tr class="is-selected">
+                  <td><strong>Ours (with GACL)</strong></td>
+                  <td><strong>0.6439</strong></td>
+                  <td><strong>0.6029</strong></td>
+                  <td><strong>0.2270</strong></td>
+                  <td><strong>0.1562</strong></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <!-- Dementia Prediction Table. -->
+      <div class="item">
+        <div class="result-card">
+          <h3 class="title is-4 has-text-centered">
+            Incident Dementia Prediction
+          </h3>
+          <div class="table-container">
+            <table class="table is-bordered is-striped is-hoverable is-fullwidth">
+              <thead>
+                <tr>
+                  <th>Model</th>
+                  <th>AUROC</th>
+                  <th>Balanced Acc.</th>
+                  <th>F1-Score</th>
+                  <th>MCC</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Baseline SVM</td>
+                  <td>0.5714</td>
+                  <td>0.5431</td>
+                  <td>0.1349</td>
+                  <td>0.0595</td>
+                </tr>
+                <tr>
+                  <td>KeepFIT-CFP</td>
+                  <td>0.4903</td>
+                  <td>0.4879</td>
+                  <td>0.1113</td>
+                  <td>-0.0157</td>
+                </tr>
+                <tr>
+                  <td>BiomedCLIP</td>
+                  <td>0.5430</td>
+                  <td>0.5101</td>
+                  <td>0.1091</td>
+                  <td>0.0072</td>
+                </tr>
+                <tr>
+                  <td>RETCLIP</td>
+                  <td>0.6029</td>
+                  <td>0.5397</td>
+                  <td>0.1500</td>
+                  <td>0.0751</td>
+                </tr>
+                <tr>
+                  <td>PMC-CLIP</td>
+                  <td>0.4605</td>
+                  <td>0.5550</td>
+                  <td>0.1725</td>
+                  <td>0.0971</td>
+                </tr>
+                <tr>
+                  <td>RETFound+GatorTron</td>
+                  <td>0.6596</td>
+                  <td>0.6121</td>
+                  <td>0.2239</td>
+                  <td>0.1532</td>
+                </tr>
+                <tr>
+                  <td>Ours (no GACL)</td>
+                  <td>0.5886</td>
+                  <td>0.5768</td>
+                  <td>0.1912</td>
+                  <td>0.1003</td>
+                </tr>
+                <tr class="is-selected">
+                  <td><strong>Ours (with GACL)</strong></td>
+                  <td><strong>0.6782</strong></td>
+                  <td><strong>0.6294</strong></td>
+                  <td><strong>0.2599</strong></td>
+                  <td><strong>0.1915</strong></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <!-- Morphometric vs Latent. -->
+      <div class="item">
+        <div class="result-card">
+          <h3 class="title is-4 has-text-centered">
+            Image Similarity: Morphometric vs. Latent Features
+          </h3>
+          <div class="table-container">
+            <table class="table is-bordered is-striped is-hoverable is-fullwidth">
+              <thead>
+                <tr>
+                  <th>Task / Feature</th>
+                  <th>AUROC</th>
+                  <th>Balanced Acc.</th>
+                  <th>F1-Score</th>
+                  <th>MCC</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td colspan="5" class="has-text-weight-bold">
+                    Alzheimer's Disease
+                  </td>
+                </tr>
+                <tr>
+                  <td>Latent Feature</td>
+                  <td>0.6110</td>
+                  <td>0.5699</td>
+                  <td>0.1920</td>
+                  <td>0.1015</td>
+                </tr>
+                <tr class="is-selected">
+                  <td><strong>Morphometric Feature</strong></td>
+                  <td><strong>0.6439</strong></td>
+                  <td><strong>0.6029</strong></td>
+                  <td><strong>0.2270</strong></td>
+                  <td><strong>0.1562</strong></td>
+                </tr>
+                <tr>
+                  <td colspan="5" class="has-text-weight-bold">
+                    Dementia
+                  </td>
+                </tr>
+                <tr>
+                  <td>Latent Feature</td>
+                  <td>0.6550</td>
+                  <td>0.6149</td>
+                  <td>0.2286</td>
+                  <td>0.1568</td>
+                </tr>
+                <tr class="is-selected">
+                  <td><strong>Morphometric Feature</strong></td>
+                  <td><strong>0.6782</strong></td>
+                  <td><strong>0.6294</strong></td>
+                  <td><strong>0.2599</strong></td>
+                  <td><strong>0.1915</strong></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <div class="content has-text-justified">
+          <p>
+            <span class="reveal">REVEAL</span> with GACL achieves the best performance
+            across all metrics for both AD and dementia prediction, outperforming strong
+            baselines including RETFound+GatorTron, RETCLIP, BiomedCLIP, and PMC-CLIP.
+            Notably, incorporating clinically grounded morphometric features for
+            image&ndash;image similarity consistently yields superior performance
+            compared to latent features, indicating that domain-specific structural
+            measurements provide a more reliable signal for aligning subjects with
+            similar retinal phenotypes.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!--/ Results. -->
+
+<!-- Related Links. -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Related Links</h2>
+        <div class="content has-text-justified">
+          <p>
+            This work builds on data and methods from several important resources.
+          </p>
+          <p>
+            The study uses retinal imaging and health data from the
+            <a href="https://www.ukbiobank.ac.uk/">UK Biobank</a>, a large-scale
+            biomedical database. Retinal morphometric features are extracted using the
+            <a href="https://github.com/rmaphoh/AutoMorph">AutoMorph</a> pipeline.
+          </p>
+          <p>
+            The vision&ndash;language alignment builds on the
+            <a href="https://arxiv.org/abs/2103.00020">CLIP</a> framework, and
+            synthetic clinical reports are generated using
+            <a href="https://arxiv.org/abs/2407.21783">LLaMA 3.1</a>.
+          </p>
+          <p>
+            We compare against several fundus-based foundation models including
+            <a href="https://arxiv.org/abs/2308.07741">RETFound</a>,
+            <a href="https://arxiv.org/abs/2405.14137">RET-CLIP</a>,
+            <a href="https://arxiv.org/abs/2405.11793">KeepFIT</a>,
+            <a href="https://arxiv.org/abs/2303.00915">BiomedCLIP</a>, and
+            <a href="https://arxiv.org/abs/2303.12112">PMC-CLIP</a>, as well as
+            the clinical language model
+            <a href="https://www.nature.com/articles/s41746-022-00742-2">GatorTron</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!--/ Related Links. -->
+
+<!-- BibTeX. -->
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@inproceedings{leem2026reveal,
+  title={REVEAL: Multimodal Vision--Language Alignment of Retinal Morphometry and Clinical Risks for Incident AD and Dementia Prediction},
+  author={Leem, Seowung and Gu, Lin and You, Chenyu and Gong, Kuang and Fang, Ruogu},
+  booktitle={Medical Imaging with Deep Learning},
+  year={2026}
+}</code></pre>
+  </div>
+</section>
+<!--/ BibTeX. -->
+
+<!-- Footer. -->
+<footer class="footer">
+  <div class="container">
+    <div class="content has-text-centered">
+      <a class="icon-link"
+         href="https://openreview.net/pdf?id=aOKAXRHXVw">
+        <i class="fas fa-file-pdf"></i>
+      </a>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            This website is licensed under a
+            <a rel="license"
+               href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+          <p>
+            The template is borrowed from
+            <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+<!--/ Footer. -->
+
+</body>
+</html>

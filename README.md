@@ -8,7 +8,9 @@ Side-by-side outputs from different AI models, deployed via GitHub Pages.
 |-------|------|--------|
 | OpenClaw | `/openclaw` | REVEAL |
 | GPT-5.2 | `/gpt-5.2` | REVEAL 2 |
-| Claude Code (Opus 4.6) | `/claude-opus` | REVEAL 3 |
+| Claude Code (Opus 4.6) | `/claude-code` | REVEAL 3 |
+| OpenCode Simple | `/opencode` | REVEAL 4 |
+| OpenCode Enhanced Frontend | `/opencode-enhanced` | REVEAL 5 |
 
 ## Adding a New Model
 
