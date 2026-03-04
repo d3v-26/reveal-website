@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="REVEAL aligns retinal fundus photographs with clinical risk-factor narratives to predict incident Alzheimer’s disease and dementia years before diagnosis.">
+  <meta name="keywords" content="retina, fundus, alzheimer's disease, dementia, vision-language, contrastive learning, CLIP">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>REVEAL: Retinal-risk Vision-language Early Alzheimer’s Learning</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.svg">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+  <div class="navbar-menu">
+    <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+      <a class="navbar-item" href="#top">Home</a>
+      <a class="navbar-item" href="#abstract">Abstract</a>
+      <a class="navbar-item" href="#method">Method</a>
+      <a class="navbar-item" href="#results">Results</a>
+      <a class="navbar-item" href="#BibTeX">BibTeX</a>
+    </div>
+  </div>
+</nav>
+
+
+<section class="hero" id="top">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">
+            REVEAL: Multimodal Vision–Language Alignment of Retinal Morphometry and Clinical Risks for Incident AD and Dementia Prediction
+          </h1>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">Seowung Leem<sup>1</sup>,</span>
+            <span class="author-block">Lin Gu<sup>2</sup>,</span>
+            <span class="author-block">Chenyu You<sup>3,4</sup>,</span>
+            <span class="author-block">Kuang Gong<sup>1</sup>,</span>
+            <span class="author-block">Ruogu Fang<sup>1</sup></span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>University of Florida,</span>
+            <span class="author-block"><sup>2</sup>Tohoku University,</span>
+            <span class="author-block"><sup>3</sup>Stony Brook University,</span>
+            <span class="author-block"><sup>4</sup>Stony Brook University (CS)</span>
+          </div>
+
+          <div class="is-size-6" style="margin-top: 10px;">
+            <span class="tag is-light">MIDL 2026 submission</span>
+            <span class="tag is-light">PMLR (under review)</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <span class="link-block">
+                <a href="./static/pdfs/reveal-paper.pdf"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                  <span>Paper (PDF)</span>
+                </a>
+              </span>
+
+              <span class="link-block">
+                <a href="#BibTeX"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="ai ai-open-access"></i></span>
+                  <span>BibTeX</span>
+                </a>
+              </span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="hero teaser is-light">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <figure class="image">
+        <img src="./static/figures/fig3-gacl-schematic.svg" alt="REVEAL overview and group-aware contrastive learning schematic" style="border-radius: 12px;">
+      </figure>
+      <h2 class="subtitle has-text-centered" style="margin-top: 14px;">
+        REVEAL aligns <b>color fundus photographs</b> with <b>synthetic clinical risk narratives</b> and improves early prediction of incident AD and dementia.
+      </h2>
+    </div>
+  </div>
+</section>
+
+
+<section class="section" id="abstract">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            The retina provides a unique, noninvasive window into Alzheimer’s disease and dementia,
+            capturing early structural changes through morphometric features, while systemic and lifestyle risk factors
+            reflect well-established contributors to AD and dementia susceptibility long before clinical symptom onset.
+            However, current retinal analysis frameworks typically model imaging and risk factors separately,
+            preventing them from capturing the joint multimodal patterns that are critical for early risk prediction.
+            Moreover, existing methods rarely incorporate mechanisms to organize or align patients with similar retinal
+            and clinical characteristics, limiting their ability to learn coherent cross-modal associations.
+          </p>
+          <p>
+            We introduce <b>REVEAL</b> (REtinal-risk Vision-language Early Alzheimer’s Learning) that aligns color fundus
+            photographs with individualized disease-specific risk profiles for incident AD and dementia prediction
+            on average <b>8 years</b> before diagnosis. Because real-world risk factors are structured questionnaire data,
+            we first translate them into clinically interpretable narratives compatible with pretrained vision-language models.
+            We further propose a <b>group-aware contrastive learning</b> strategy that clusters patients with similar retinal
+            morphometry and risk factors as positive pairs, strengthening multimodal alignment.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section" id="method">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3 has-text-centered">Method</h2>
+
+        <div class="columns is-vcentered">
+          <div class="column">
+            <h3 class="title is-4">Clinical report synthesis from structured risk factors</h3>
+            <div class="content has-text-justified">
+              <p>
+                Structured questionnaire variables cannot be directly used as language input to a vision–language model.
+                REVEAL converts each participant’s risk profile into a standardized, clinically styled narrative (CARE-guideline inspired)
+                using an LLM, enabling seamless multimodal alignment.
+              </p>
+            </div>
+          </div>
+          <div class="column">
+            <figure class="image">
+              <img src="./static/figures/fig2-report-generation.svg" alt="Synthetic clinical report generation pipeline" style="border-radius: 12px;">
+            </figure>
+          </div>
+        </div>
+
+        <hr/>
+
+        <div class="columns is-vcentered">
+          <div class="column">
+            <figure class="image">
+              <img src="./static/figures/fig-gacl-detail.svg" alt="Group-aware contrastive learning details" style="border-radius: 12px;">
+            </figure>
+          </div>
+          <div class="column">
+            <h3 class="title is-4">Group-aware contrastive learning (GACL)</h3>
+            <div class="content has-text-justified">
+              <p>
+                Instead of treating only same-subject image–text pairs as positives, GACL forms additional positives by
+                grouping subjects who are similar in <b>retinal morphometry</b> and/or <b>clinical report embedding space</b>.
+                This strengthens alignment and improves downstream incident AD/dementia prediction.
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section" id="results">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3 has-text-centered">Results (from the manuscript)</h2>
+
+        <div class="columns">
+          <div class="column">
+            <div class="box">
+              <h3 class="title is-5">Incident Alzheimer’s disease prediction</h3>
+              <div class="content">
+                <ul>
+                  <li><b>REVEAL (with GACL)</b>: AUROC 0.6439; Balanced Acc 0.6029; F1 0.2270; MCC 0.1562</li>
+                  <li>RETFound + GatorTron: AUROC 0.6418</li>
+                  <li>Baseline SVM (tabular + morphometry): AUROC 0.5721</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="column">
+            <div class="box">
+              <h3 class="title is-5">Incident dementia prediction</h3>
+              <div class="content">
+                <ul>
+                  <li><b>REVEAL (with GACL)</b>: AUROC 0.6782; Balanced Acc 0.6294; F1 0.2599; MCC 0.1915</li>
+                  <li>RETFound + GatorTron: AUROC 0.6596</li>
+                  <li>Baseline SVM (tabular + morphometry): AUROC 0.5714</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <p class="has-text-centered is-size-7 has-text-grey">
+          Values above are quoted from Tables 2–3 of the provided manuscript.
+        </p>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@misc{leem2026reveal,
+  title   = {REVEAL: Multimodal Vision--Language Alignment of Retinal Morphometry and Clinical Risks for Incident AD and Dementia Prediction},
+  author  = {Leem, Seowung and Gu, Lin and You, Chenyu and Gong, Kuang and Fang, Ruogu},
+  year    = {2026},
+  note    = {MIDL 2026 submission (under review)},
+}
+</code></pre>
+  </div>
+</section>
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="content has-text-centered">
+      <a class="icon-link" href="./static/pdfs/reveal-paper.pdf">
+        <i class="fas fa-file-pdf"></i>
+      </a>
+      <a class="icon-link" href="https://github.com/nerfies/nerfies.github.io" class="external-link">
+        <i class="fab fa-github"></i>
+      </a>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            Website template adapted from <a href="https://github.com/nerfies/nerfies.github.io">nerfies.github.io</a>.
+          </p>
+          <p>
+            Please remove any analytics you do not want (this REVEAL page includes none).
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
