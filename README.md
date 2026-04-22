@@ -12,6 +12,7 @@ Side-by-side outputs from different AI models, deployed via GitHub Pages.
 | OpenCode Simple | `/opencode` | REVEAL 4 |
 | OpenCode Enhanced Frontend | `/opencode-enhanced` | REVEAL 5 |
 | Stitch UI | `/stitch` | REVEAL 6 |
+| Claude Design (Opus 4.7) | `/claude-design` | REVEAL 7 |
 
 ## Adding a New Model
 
